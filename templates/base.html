@@ -48,28 +48,8 @@
         </script>
     </head>
     <body>
-        <div class="menu">
-            <a class="{{ main_active }}" href="/">Main</a>
-            <a class="{{ about_active }}" href="/about/">About</a>
-            <a href="http://live.sympy.org">SymPy Live</a>
-
-            <div class="menu_right">
-                <a href="{{ auth_url }}">{{ auth_message }}</a>
-            </div>
-        </div>
         <div class="gbh" style="left: 0px; opacity: 1; "></div>
     {% block content %}
     {% endblock %}
-    <div id="footer">
-        <p>
-        SymPy Gamma version {{ app_version }}, deployed on {{ app_deployed }}.
-        </p>
-
-        <p>
-        &copy; 2013 SymPy Development Team. This project is
-        open-source: <a href="https://github.com/sympy/sympy_gamma/">
-            SymPy Gamma on Github</a>.
-        </p>
-    </div>
     </body>
 </html>

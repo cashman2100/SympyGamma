@@ -66,6 +66,7 @@ class SymPyGamma(object):
             cards = []
 
             close_match = close_matches(s, sympy.__dict__)
+            #if False:
             if close_match:
                 cards.append({
                     "ambiguity": close_match,
@@ -196,9 +197,11 @@ class SymPyGamma(object):
     def prepare_cards(self, parsed, arguments, evaluator, evaluated):
         components, cards, evaluated, is_function = self.get_cards(arguments, evaluator, evaluated)
 
+        
         if is_function:
+            ret_latex = latex(evaluated)
             latex_input = ''.join(['<script type="math/tex; mode=display">',
-                                   latexify(parsed, evaluator),
+                                   ret_latex,
                                    '</script>'])
         else:
             latex_input = mathjax_latex(evaluated)
