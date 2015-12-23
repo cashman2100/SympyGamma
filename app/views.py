@@ -137,6 +137,7 @@ class MobileTextInput(forms.widgets.TextInput):
 
 class SearchForm(forms.Form):
     i = forms.CharField(required=False, widget=MobileTextInput())
+    l = forms.CharField(required=False, widget=MobileTextInput())
 
 def authenticate(view):
     def _wrapper(request, **kwargs):
@@ -199,12 +200,30 @@ def input(request, user):
         form = SearchForm(request.GET)
         if form.is_valid():
             input = form.cleaned_data["i"]
+            latex =  form.cleaned_data["l"]
+            latex_mathjax = ''.join(['<script type="math/tex; mode=display">',
+                                   latex,
+                              '</script>'])
 
             if input.strip().lower() in ('random', 'example', 'random example'):
                 return redirect('/random')
 
             g = SymPyGamma()
-            r = g.eval(input)
+            
+            r = None
+            if latex:
+                r = [{
+                "title": "TeX",
+                "input": latex,
+                "output": latex_mathjax
+                }]
+
+            r_new = g.eval(input)
+            if r_new:
+                if r:
+                    r.extend(r_new)
+                else:
+                    r = r_new
 
             if not r:
                 r = [{
