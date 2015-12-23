@@ -194,12 +194,12 @@ class SymPyGamma(object):
 
         return components, cards, evaluated, (is_function and is_applied)
 
-    def prepare_cards(self, parsed, arguments, evaluator, evaluated):
-        components, cards, evaluated, is_function = self.get_cards(arguments, evaluator, evaluated)
-
+    def prepare_cards(self, parsed, arguments, evaluator, evaluated_old):
+        components, cards, evaluated, is_function = self.get_cards(arguments, evaluator, evaluated_old)
+        
         
         if is_function:
-            ret_latex = latex(evaluated)
+            ret_latex = latex(evaluated_old)
             latex_input = ''.join(['<script type="math/tex; mode=display">',
                                    ret_latex,
                                    '</script>'])
