@@ -201,6 +201,9 @@ def input(request, user):
         if form.is_valid():
             input = form.cleaned_data["i"]
             latex =  form.cleaned_data["l"]
+            id = request.GET.get('id', '')
+            src = "https://s3.amazonaws.com/mpxresults/" + id + ".png"
+            print(src)
             latex_mathjax = ''.join(['<script type="math/tex; mode=display">',
                                    latex,
                               '</script>'])
@@ -241,10 +244,10 @@ def input(request, user):
                 query = models.Query(text=input, user_id=None)
                 query.put()
 
-
             # For some reason the |random tag always returns the same result
             return ("result.html", {
                 "input": input,
+		"src": src,
                 "result": r,
                 "form": form,
                 "MEDIA_URL": settings.MEDIA_URL,
