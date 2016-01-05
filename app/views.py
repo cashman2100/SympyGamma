@@ -12,6 +12,7 @@ import sympy
 from logic.utils import Eval
 from logic.logic import SymPyGamma, mathjax_latex
 from logic.resultsets import get_card, find_result_set
+from sympy_parser.process_latex import process_sympy
 
 import settings
 import models
