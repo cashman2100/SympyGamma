@@ -124,8 +124,8 @@ class IntegralPrinter(object):
     def print_Add(self, rule):
         with self.new_step():
             self.append("Integrate term-by-term:")
-            for substep in rule.substeps:
-                with self.new_level():
+            with self.new_level():
+                for substep in rule.substeps:
                     self.print_rule(substep)
             self.append("The result is: {}".format(
                 self.format_math(_manualintegrate(rule))))
