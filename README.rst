@@ -54,6 +54,22 @@ web server)::
 (the number does not matter unless you are deploying, see below). **DO not**
 commit the generated ``app.yaml`` file.
 
+Parser Setup
+------------
+
+Generate the LaTeX parser with ANTLR:
+
+::
+
+  $ antl4 sympy_parser/PS.g4 -o sympy_parser/gen/
+  
+Or if you don't have the ANTLR binary aliased
+
+::
+
+  $ java -jar /usr/local/lib/antlr-4.5.1-complete.jar sympy_parser/PS.g4 -o sympy_parser/gen/
+
+
 Development server
 ------------------
 
