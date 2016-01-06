@@ -200,11 +200,17 @@ def input(request, user):
     if request.method == "GET":
         form = SearchForm(request.GET)
         if form.is_valid():
-            input = form.cleaned_data["i"]
+            x = form.cleaned_data["i"]
+            try:
+                input = process_sympy(x)
+            except:
+                input = x
+
+            # possible query parameter
             latex =  form.cleaned_data["l"]
+            # query parameter which can show image on top
             id = request.GET.get('id', '')
             src = "https://s3.amazonaws.com/mpxresults/" + id + ".png"
-            print(src)
             latex_mathjax = ''.join(['<script type="math/tex; mode=display">',
                                    latex,
                               '</script>'])
