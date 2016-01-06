@@ -334,7 +334,7 @@ class DiffPrinter(object):
 
     def print_Add(self, rule):
         with self.new_step():
-            self.append("Differentiate {} term by term:".format(
+            self.append("Differentiate {} term-by-term:".format(
                 self.format_math(rule.context)))
             with self.new_level():
                 for substep in rule.substeps:
