@@ -56,11 +56,8 @@ var Card = (function() {
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
             }
             else {
-                var error = $("<div/>")
-                    .addClass('cell_output_plain')
-                    .html(data.error);
-                this.output.html(error);
-                this.element.addClass('result_card_error');
+                console.log("Error loading card");
+                this.element.remove();
                 this.removeOptionsSection();
             }
             this.output.children('.loader').fadeOut(500);
@@ -76,10 +73,8 @@ var Card = (function() {
     }
 
     Card.prototype.evaluateError = function() {
-        this.output.html($("<div/>").html("Error occurred"));
-        this.removeOptionsSection();
-        this.element.addClass('result_card_error');
-        this.output.children('.loader').fadeOut(500);
+        // remove on error
+        this.element.remove();
     };
 
     Card.prototype.addOptionsSection = function() {
