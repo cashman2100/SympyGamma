@@ -4,3 +4,6 @@
 [submodule "docutils"]
 	path = docutils
 	url = git://repo.or.cz/docutils.git
+[submodule "latex2sympy"]
+	path = latex2sympy
+	url = git@github.com:augustt198/latex2sympy.git
