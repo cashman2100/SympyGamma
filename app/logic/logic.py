@@ -199,9 +199,9 @@ class SymPyGamma(object):
         
         
         if is_function:
-            #ret_latex = latex(evaluated_old)
+            ret_latex = latex(evaluated_old)
             latex_input = ''.join(['<script type="math/tex; mode=display">',
-                                   latexify(parsed, evaluator),
+                                   ret_latex,
                                    '</script>'])
         else:
             latex_input = mathjax_latex(evaluated)
