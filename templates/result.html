@@ -1,11 +1,6 @@
-{% extends "base.html" %}
     {% load extra_tags %}
-    {% block title %}
-    SymPy Gamma
-    {% endblock %}
 
     {% block content %}
-	<div align="middle"><img class="img" src="{{ src }}"/></div>
         <div class="input result">
             <form action="/input/" method="GET">
                 {{ form.i }}<input class="input_field" type="submit" value="=" />

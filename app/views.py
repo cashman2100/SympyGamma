@@ -262,6 +262,13 @@ def input(request, user):
                 })
 
 @app_version
+def request(req, image_id):
+    return ("request.html", {
+        "MEDIA_URL": settings.MEDIA_URL,
+        "image_id": image_id
+    })
+
+@app_version
 @authenticate
 def about(request, user):
     return ("about.html", {

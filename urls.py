@@ -14,6 +14,7 @@ urlpatterns = patterns(
     (r'^$', 'app.views.index'),
 
     (r'^input/', 'app.views.input'),
+    (r'^request/(?P<image_id>\w*)$', 'app.views.request'),
     (r'^about/$', 'app.views.about'),
     (r'^random', 'app.views.random_example'),
 

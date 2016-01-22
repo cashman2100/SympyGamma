@@ -188,7 +188,8 @@ function setupVariableChooser() {
     });
 }
 
-$(document).ready(function() {
+
+var loadCards = (function() {
     evaluateCards().done(function() {
         setupPlots();
 
