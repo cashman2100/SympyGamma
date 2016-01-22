@@ -61,13 +61,15 @@ Generate the LaTeX parser with ANTLR:
 
 ::
 
-  $ antl4 sympy_parser/PS.g4 -o sympy_parser/gen/
+  $ cd latex2sympy
+  $ antl4 PS.g4 -o gen/
   
 Or if you don't have the ANTLR binary aliased
 
 ::
 
-  $ java -jar /usr/local/lib/antlr-4.5.1-complete.jar sympy_parser/PS.g4 -o sympy_parser/gen/
+  $ cd latex2sympy
+  $ java -jar /usr/local/lib/antlr-4.5.1-complete.jar PS.g4 -o gen/
 
 
 Development server
