@@ -200,11 +200,11 @@ def input(request, user):
     if request.method == "GET":
         form = SearchForm(request.GET)
         if form.is_valid():
-            x = form.cleaned_data["i"]
+            raw_in = form.cleaned_data["i"]
             try:
-                input = process_sympy(x)
+                input = process_sympy(raw_in)
             except:
-                input = x
+                input = raw_in
 
             # possible query parameter
             latex =  form.cleaned_data["l"]
@@ -255,6 +255,7 @@ def input(request, user):
             return ("result.html", {
                 "input": input,
 		"src": src,
+                "wolfram": raw_in,
                 "result": r,
                 "form": form,
                 "MEDIA_URL": settings.MEDIA_URL,
