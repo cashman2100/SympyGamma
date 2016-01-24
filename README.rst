@@ -54,6 +54,8 @@ web server)::
 (the number does not matter unless you are deploying, see below). **DO not**
 commit the generated ``app.yaml`` file.
 
+Edit the ``app.yaml`` file my marking ``threadsafe`` to ``false``.
+
 Parser Setup
 ------------
 
