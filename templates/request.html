@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% load extra_tags %}
+{% block title %}
+Loading
+{% endblock %}
+
+{% block content %}
+
+<div id = "imgEl">
+</div>
+
+<div id = "cardsEl">
+</div>
+
+<script>
+    var BASE_BUCKET_URL = "https://s3.amazonaws.com/mpxresults/";
+
+    function renderLatex(latex, id) {
+        $.ajax('/input/', {
+            type: 'get',
+            data: {i: latex},
+            dataType: 'html',
+            success: function(html) {
+                if (id) {
+                    $("#imgEl").empty();
+                    $("#imgEl").append(
+                        $("<div></div>").attr('align', 'middle')
+                        .append(
+                            $("<img/>")
+                                .attr('src', BASE_BUCKET_URL + id + ".jpg")
+                                .attr('class', 'img')
+                        )
+                    );
+                }
+                $("#cardsEl").empty();
+                $("#cardsEl").append(html);
+                evaluateCards().done(function() {
+                    setupPlots();
+
+                    setupExamples();
+                    setupSavedQueries();
+
+                    setupFactorization();
+
+                    setupDidYouMean();
+
+                    setupVariableChooser();
+
+                    // TODO: finish integration with Sphinx
+                    // setupDocumentation();
+                });
+
+                $("#input").submit(function( event ) {
+                  var latex = $(this).find('input').val()
+                  renderLatex(latex, "");
+                  event.preventDefault();
+                });
+
+            }
+        });
+    }
+
+    var tries = 0;
+    function loadRequest() {
+        var id = "{{ image_id }}";
+        var jsonURL = BASE_BUCKET_URL + id + ".json";
+
+        $.getJSON(jsonURL)
+            .fail(function() {
+                tries++;
+                if (tries < 20) {
+                    setTimeout(loadRequest, 500);
+                }
+            })
+            .done(function(data) {
+                renderLatex(data.latex, id);
+            });
+    }
+
+    loadRequest();
+
+</script>
+{% endblock %}
