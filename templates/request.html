@@ -101,6 +101,7 @@ Loading
             })
             .done(function(data) {
                 renderLatex(data.latex, id);
+                $("#spinnerEl").remove();
             });
     }
 
