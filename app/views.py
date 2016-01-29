@@ -207,7 +207,7 @@ def input(request, user):
                 input = raw_in
 
             # possible query parameter
-            latex =  form.cleaned_data["l"]
+            latex =  raw_in
             # query parameter which can show image on top
             id = request.GET.get('id', '')
             src = "https://s3.amazonaws.com/mpxresults/" + id + ".png"
@@ -221,8 +221,9 @@ def input(request, user):
             g = SymPyGamma()
             
             r = None
+            rLatex = []
             if latex:
-                r = [{
+                rLatex = [{
                 "title": "TeX",
                 "input": latex,
                 "output": latex_mathjax
@@ -257,6 +258,7 @@ def input(request, user):
 		"src": src,
                 "wolfram": raw_in,
                 "result": r,
+                "rLatex": rLatex,
                 "form": form,
                 "MEDIA_URL": settings.MEDIA_URL,
                 "promote_live": random.choice(LIVE_PROMOTION_MESSAGES)
