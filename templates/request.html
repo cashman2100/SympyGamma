@@ -17,8 +17,6 @@ Loading
 <div id = "spinnerEl">
 </div>
 
-<script src="/static/js/spin.min.js"></script>
-
 <script>
     // --- Add spinny animation ---
     var opts = {
@@ -58,31 +56,25 @@ Loading
             success: function(html) {
                 if (id) {
                     $("#imgEl").empty();
+                    var img = $("<img/>");
+                    img.on('load', function() {$("#spinnerEl").remove();});
+                    img.attr('src', BASE_BUCKET_URL + id + ".jpg");
+                    img.attr('class', 'img');
+
                     $("#imgEl").append(
                         $("<div></div>").attr('align', 'middle')
-                        .append(
-                            $("<img/>")
-                                .attr('src', BASE_BUCKET_URL + id + ".jpg")
-                                .attr('class', 'img')
-                        )
+                        .append(img)
                     );
                 }
                 $("#cardsEl").empty();
                 $("#cardsEl").append(html);
                 evaluateCards().done(function() {
                     setupPlots();
-
                     setupExamples();
                     setupSavedQueries();
-
                     setupFactorization();
-
                     setupDidYouMean();
-
                     setupVariableChooser();
-
-                    // TODO: finish integration with Sphinx
-                    // setupDocumentation();
                 });
 
                 $("#input").submit(function( event ) {
@@ -109,7 +101,6 @@ Loading
             })
             .done(function(data) {
                 renderLatex(data.latex, id);
-                $("#spinnerEl").remove();
             });
     }
 
