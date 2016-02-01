@@ -8,7 +8,7 @@ body {
   padding: 0;
   margin: 0;
   background-color: #eee;
-}
+  }
 
 pre, ul, button, h2, h3, h4, input, label {
   margin: 0;
@@ -224,8 +224,8 @@ h1 a img {
 .input {
   text-align: center;
   padding: 5px 0;
-  width: 100%;
-  background: #3e5f8a;
+  width: 95%;
+  background: #777;
 }
 
 .input form {
@@ -253,11 +253,11 @@ h1 a img {
   font-size: 1.3em;
   color: #FFF;
   border: 0;
-  background-color: #3e5f8a;
+  background-color:#888;
 }
 
 .input input[type="submit"]:hover {
-  background-color: #6f96c5;
+  background-color: #2f73ba;
 }
 
 #mobile-keyboard {
@@ -429,11 +429,11 @@ p {
   color: #FFF;
   padding: 0.25em;
   margin: 0.5em 0.25em 0.5em 0;
-  background-color: #263b55;
+  background-color: #428bd5;
 }
 
 #random-example:hover, button:hover {
-  background-color: #365378 ;
+  background-color: #428bd5;
 }
 
 button {
@@ -709,7 +709,7 @@ td .false {
 @media screen and (max-device-width: 767px) {
 /*Image size*/
   .img{
-    width:70%;
+    width:60%;
   }
   .menu {
     padding: 0.25em 0.5em;
@@ -720,11 +720,12 @@ td .false {
   }
   .result_card {
     -webkit-box-shadow: none;
+    border: 1px solid #ddd;
     box-shadow: none;
-    border: 2px solid #DDD;
-    border-radius: 2px;
-    margin: 3px;
-    padding: 5px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    padding-top:5px;
+    padding-bottom: 5px;
   }
 
   .did_you_mean {
@@ -761,17 +762,18 @@ td .false {
   }
 
   .input form {
-    margin: 0 auto;
+    margin-left: 10px;
+    margin-right:10px;
     width: auto;
   }
 
   .input input[type="text"] {
     margin: 0 auto;
-    width: 70%;
+    width: 79%;
   }
 
   .input input[type="submit"] {
-    width: 20%;
+    width: 17%;
     height: 150%;
     line-height: 150%;
   }
@@ -781,7 +783,6 @@ td .false {
   }
 
   .result, #footer {
-    width: 95%;
     margin: 10px auto;
   }
 
