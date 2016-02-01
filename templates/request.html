@@ -17,6 +17,9 @@ Loading
 <div id = "spinnerEl">
 </div>
 
+<div id = "errorEl">
+</div>
+
 <script>
     // --- Add spinny animation ---
     var opts = {
@@ -96,12 +99,22 @@ Loading
                 tries++;
                 if (tries < 20) {
                     setTimeout(loadRequest, 500);
+                } else {
+                    var errorMessage = "<p align='middle'><font color='red'>" + 
+                        "Server timed out.  Really sorry!" + "</font></p>";
+                    $("#spinnerEl").remove();
+                    $("#errorEl").html(errorMessage);
                 }
-                // TODO: add logic if times out
             })
             .done(function(data) {
-                renderLatex(data.latex, id);
-                $("#spinnerEl").remove();
+                if (data.error.length > 0) {
+                    var errorMessage = "<p align='middle'><font color='red'>" + 
+                        data.error + "</font></p>";
+                    $("#spinnerEl").remove();
+                    $("#errorEl").html(errorMessage);
+                } else {
+                    renderLatex(data.latex, id);
+                }
             });
     }
 
