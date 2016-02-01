@@ -54,6 +54,14 @@ web server)::
 (the number does not matter unless you are deploying, see below). **DO not**
 commit the generated ``app.yaml`` file.
 
+Install antl4 python module::
+
+  $ pip install antlr4-python2-runtime -t .
+
+Install django::
+
+  $ sudo pip install django
+
 Parser Setup
 ------------
 
