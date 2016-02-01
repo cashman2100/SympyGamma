@@ -224,8 +224,6 @@ def input(request, user):
             rLatex = []
             if latex:
                 rLatex = [{
-                "title": "TeX",
-                "input": latex,
                 "output": latex_mathjax
                 }]
 
