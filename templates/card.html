@@ -6,7 +6,7 @@
 {% else %}
  <div class="result_card{% if cell.error or cell.exception_info %} result_card_error{%endif%}">
    <div class="card_title">
-     <a {% if cell.card %} href="#{{ cell.card }}" title="Link to {{ cell.title }} card" id="{{ cell.card }}" {% endif %}>{{ cell.title }}:</a>
+     <a {% if cell.card %} href="#{{ cell.card }}" title="Link to {{ cell.title }} card" id="{{ cell.card }}" {% endif %}>{{ cell.title }}</a>
    </div>
    {% if cell.input %}
     <div class="cell_input">
