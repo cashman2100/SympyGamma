@@ -65,13 +65,13 @@ class SymPyGamma(object):
 
             cards = []
 
-            close_match = close_matches(s, sympy.__dict__)
-            #if False:
-            if close_match:
-                cards.append({
-                    "ambiguity": close_match,
-                    "description": ""
-                })
+            # This isn't very helpful
+            # close_match = close_matches(s, sympy.__dict__)
+            # if close_match:
+            #     cards.append({
+            #         "ambiguity": close_match,
+            #         "description": ""
+            #     })
 
             try:
                 cards.extend(self.prepare_cards(parsed, arguments, evaluator, evaluated))
