@@ -12,6 +12,11 @@
         </form>
     </div>
     <div class="result">
+        <div class="foot"> 
+            See what <a class="wolfram" 
+            href="http://www.wolframalpha.com/input/?i={{wolfram|urlencode}}"> 
+                Wolfram|Alpha</a> has to say. 
+        </div> 
         {% for cell in result %}
             {% show_card cell input %}
         {% endfor %}
