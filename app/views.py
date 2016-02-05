@@ -18,6 +18,7 @@ import settings
 import models
 
 import os
+import re
 import random
 import json
 import urllib
@@ -202,7 +203,12 @@ def input(request, user):
         if form.is_valid():
             raw_in = form.cleaned_data["i"]
             try:
-                input = process_sympy(raw_in)
+                # exponents
+                pre_sym = re.sub(r"(?<!\S)(e)", r"E", raw_in)
+                # sympy doesn't care about 'y =' or 'f(x) =', ignore this
+                pre_sym = pre_sym.replace("y =", "")
+                pre_sym = re.sub(r"[a-zA-Z][\s]*[(][\s]*[xyz][\s]*[)][\s]*[=]", r"", pre_sym)
+                input = process_sympy(pre_sym)
             except:
                 input = raw_in
 
