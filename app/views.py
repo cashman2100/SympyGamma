@@ -230,6 +230,8 @@ def input(request, user):
             rLatex = []
             if latex:
                 rLatex = [{
+                "title": "Input",
+                "input": input,
                 "output": latex_mathjax
                 }]
 
