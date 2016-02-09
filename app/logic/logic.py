@@ -85,10 +85,13 @@ class SymPyGamma(object):
 
             reordered_cards = []
             plot_card = None
+            card_titles = [c.get('title', None) for c in cards]
             for c in cards:
                 if c.get('title', None) == 'Antiderivative forms':
                     c['title'] = 'Integral'
                 if c.get('title', None) == 'SymPy':
+                    if 'Result' in card_titles:
+                        continue
                     c['title'] = 'Result'
                     prefix = '<script type="math/tex; mode=display">'
                     suffix = '</script>'
