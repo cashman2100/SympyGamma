@@ -658,7 +658,8 @@ function setupPlots() {
             });
         };
         options.append([
-            $('<p>Drag to pan, (shift-)double-click to zoom, drag corner to resize</p>')
+            // $('<p>Drag to pan, (shift-)double-click to zoom, drag corner to resize</p>')
+            $('<p>Drag to pan, pinch to zoom</p>')
                 .addClass('help'),
             $('<button>Reset</button>')
                 .addClass('card_options_toggle')
@@ -670,15 +671,15 @@ function setupPlots() {
                         reset: true
                     });
                 }),
-            $('<button>Square Viewport</button>')
-                .addClass('card_options_toggle')
-                .click(function() {
-                    var size = d3.max([container.width(), container.height()]);
-                    resizeContainer({
-                        width: size,
-                        height: size
-                    });
-                }),
+            // $('<button>Square Viewport</button>')
+            //     .addClass('card_options_toggle')
+            //     .click(function() {
+            //         var size = d3.max([container.width(), container.height()]);
+            //         resizeContainer({
+            //             width: size,
+            //             height: size
+            //         });
+            //     }),
             $('<button>Fullscreen</button>')
                 .addClass('card_options_toggle')
                 .click(function() {

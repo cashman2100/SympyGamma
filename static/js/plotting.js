@@ -772,30 +772,30 @@ function setupGraphs() {
                     backend.draw();
                     backend.initDraggingZooming();
                 }),
-            $('<button>Square Viewport</button>')
-                .addClass('card_options_toggle')
-                .click(function() {
-                    var side = d3.max([container.width(), container.height()]);
-                    container.width(side);
-                    container.height(side);
-                    plot.drawOption('square', true);
-                    plot.width(side);
-                    plot.height(side);
+            // $('<button>Square Viewport</button>')
+            //     .addClass('card_options_toggle')
+            //     .click(function() {
+            //         var side = d3.max([container.width(), container.height()]);
+            //         container.width(side);
+            //         container.height(side);
+            //         plot.drawOption('square', true);
+            //         plot.width(side);
+            //         plot.height(side);
 
-                    var centerX = Math.floor((plot.xRight() + plot.xLeft()) / 2);
-                    var centerY = Math.floor((plot.yTop() + plot.yBottom()) / 2);
-                    var extent = d3.max([plot.xRight(), plot.xLeft(),
-                                         plot.yTop(), plot.yBottom()], Math.abs);
-                    plot.xLeft(Math.floor(centerX - extent / 2));
-                    plot.xRight(Math.ceil(centerX + extent / 2));
-                    plot.yTop(Math.ceil(centerY + extent / 2));
-                    plot.yBottom(Math.floor(centerY - extent / 2));
-                    backend.resize();
-                    plot.resize();
-                    backend.generateAxes();
-                    backend.draw();
-                    backend.initDraggingZooming();
-                }),
+            //         var centerX = Math.floor((plot.xRight() + plot.xLeft()) / 2);
+            //         var centerY = Math.floor((plot.yTop() + plot.yBottom()) / 2);
+            //         var extent = d3.max([plot.xRight(), plot.xLeft(),
+            //                              plot.yTop(), plot.yBottom()], Math.abs);
+            //         plot.xLeft(Math.floor(centerX - extent / 2));
+            //         plot.xRight(Math.ceil(centerX + extent / 2));
+            //         plot.yTop(Math.ceil(centerY + extent / 2));
+            //         plot.yBottom(Math.floor(centerY - extent / 2));
+            //         backend.resize();
+            //         plot.resize();
+            //         backend.generateAxes();
+            //         backend.draw();
+            //         backend.initDraggingZooming();
+            //     }),
             $('<button>Fullscreen</button>')
                 .addClass('card_options_toggle')
                 .click(function() {

@@ -137,7 +137,7 @@ class MultiResultCard(ResultCard):
         for card, result in output:
             html.append("<li>")
             html.append('<div class="cell_input">')
-            html.append(card.format_input(self.input_repr, self.components))
+            #html.append(card.format_input(self.input_repr, self.components))
             html.append('</div>')
             html.append(card.format_output(result, formatter))
             html.append("</li>")
@@ -472,7 +472,7 @@ def format_factorization_diagram(factors, formatter):
     return DIAGRAM_CODE.format(primes=primes)
 
 PLOTTING_CODE = """
-<div class="plot"
+<div class="plot" style="width: 90%;"
      data-variable="{variable}">
 <div class="graphs">{graphs}</div>
 </div>
