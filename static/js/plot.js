@@ -172,6 +172,10 @@ var D3Backend = (function(_parent) {
     };
 
     D3Backend.prototype.updateCrosshair = function(offset) {
+        // disable crosshair
+        this.crosshair.remove();
+        return;
+
         this.crosshair.select('.x').attr({
             y1: offset.y,
             x2: this.plot.scales.x(this.plot.scales.x.domain()[1]),
@@ -661,16 +665,16 @@ function setupPlots() {
             // $('<p>Drag to pan, (shift-)double-click to zoom, drag corner to resize</p>')
             $('<p>Drag to pan, pinch to zoom</p>')
                 .addClass('help'),
-            $('<button>Reset</button>')
-                .addClass('card_options_toggle')
-                .click(function() {
-                    plot.reset();
-                    resizeContainer({
-                        width: originalWidth,
-                        height: originalHeight,
-                        reset: true
-                    });
-                }),
+            // $('<button>Reset</button>')
+            //     .addClass('card_options_toggle')
+            //     .click(function() {
+            //         plot.reset();
+            //         resizeContainer({
+            //             width: originalWidth,
+            //             height: originalHeight,
+            //             reset: true
+            //         });
+            //     }),
             // $('<button>Square Viewport</button>')
             //     .addClass('card_options_toggle')
             //     .click(function() {
@@ -680,12 +684,12 @@ function setupPlots() {
             //             height: size
             //         });
             //     }),
-            $('<button>Fullscreen</button>')
-                .addClass('card_options_toggle')
-                .click(function() {
-                    card.toggleFullscreen();
-                }),
-            moreButton,
+            // $('<button>Fullscreen</button>')
+            //     .addClass('card_options_toggle')
+            //     .click(function() {
+            //         card.toggleFullscreen();
+            //     }),
+            // moreButton,
             moreContent
         ]);
 

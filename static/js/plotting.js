@@ -755,23 +755,23 @@ function setupGraphs() {
         options.append([
             $('<p>Drag plot to pan, (shift-)double-click to zoom, drag edges to resize</p>')
                 .addClass('help'),
-            $('<button>Reset</button>')
-                .addClass('card_options_toggle')
-                .click(function() {
-                    container.width(originalWidth);
-                    container.height(originalHeight);
-                    plot.drawOption('square', false);
-                    plot.width(originalWidth);
-                    plot.height(originalHeight);
-                    backend.resize();
-                    plot.resize();
-                    plot.xScale.domain([-10, 10]);
-                    plot.yScale.domain([originalYBottom, originalYTop]);
-                    plot.reloadData();
-                    backend.generateAxes();
-                    backend.draw();
-                    backend.initDraggingZooming();
-                }),
+            // $('<button>Reset</button>')
+            //     .addClass('card_options_toggle')
+            //     .click(function() {
+            //         container.width(originalWidth);
+            //         container.height(originalHeight);
+            //         plot.drawOption('square', false);
+            //         plot.width(originalWidth);
+            //         plot.height(originalHeight);
+            //         backend.resize();
+            //         plot.resize();
+            //         plot.xScale.domain([-10, 10]);
+            //         plot.yScale.domain([originalYBottom, originalYTop]);
+            //         plot.reloadData();
+            //         backend.generateAxes();
+            //         backend.draw();
+            //         backend.initDraggingZooming();
+            //     }),
             // $('<button>Square Viewport</button>')
             //     .addClass('card_options_toggle')
             //     .click(function() {
@@ -796,11 +796,11 @@ function setupGraphs() {
             //         backend.draw();
             //         backend.initDraggingZooming();
             //     }),
-            $('<button>Fullscreen</button>')
-                .addClass('card_options_toggle')
-                .click(function() {
-                    card.toggleFullscreen();
-                }),
+            // $('<button>Fullscreen</button>')
+            //     .addClass('card_options_toggle')
+            //     .click(function() {
+            //         card.toggleFullscreen();
+            //     }),
             moreButton,
             moreContent
         ]);
