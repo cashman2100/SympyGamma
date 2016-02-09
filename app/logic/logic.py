@@ -1,6 +1,7 @@
 import sys
 import traceback
 import collections
+import re
 from utils import Eval, latexify, arguments, removeSymPy, \
     custom_implicit_transformation, synonyms, OTHER_SYMPY_FUNCTIONS, \
     close_matches
@@ -78,6 +79,10 @@ class SymPyGamma(object):
             except ValueError as e:
                 return self.handle_error(s, e)
 
+            def alphanum_counter(s):
+                '''Remove any non-alphanumeric characters from s and return counts'''
+                return collections.Counter(re.sub('\W+', '', s).replace('_', ''))
+
             reordered_cards = []
             plot_card = None
             for c in cards:
@@ -85,8 +90,12 @@ class SymPyGamma(object):
                     c['title'] = 'Integral'
                 if c.get('title', None) == 'SymPy':
                     c['title'] = 'Result'
-                    if s == c['input']:
+                    prefix = '<script type="math/tex; mode=display">'
+                    suffix = '</script>'
+                    math_output = c['output'].replace(prefix, '').replace(suffix, '')
+                    if alphanum_counter(s) == alphanum_counter(math_output):
                         continue
+
                 if 'integrate' in s:
                     if c.get('title', None) in ['Integral', 'Derivative', 'Alternate forms']:
                         continue
