@@ -237,7 +237,7 @@ h1 a img {
   font-family: 'Open Sans', monospace;
   width: 82%;
   height: 1.5em;
-  font-size: 1.3em;
+  font-size: 1em;
   padding: 0 0.25em;
   border: 0;
   vertical-align: top;
@@ -776,6 +776,19 @@ td .false {
     width: 17%;
     height: 150%;
     line-height: 150%;
+  }
+
+  .input .equation-edit input[type="text"] {
+    margin: 0 auto;
+    width: 79%;
+    vertical-align: middle;
+  }
+
+  .input .equation-edit input[type="submit"] {
+    width: 17%;
+    height: 150%;
+    line-height: 150%;
+    vertical-align: middle;
   }
 
   input {

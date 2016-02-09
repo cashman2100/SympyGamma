@@ -1,24 +1,47 @@
 {% load extra_tags %}
 
 {% block content %}
+    <div class="input result" style="background: rgba(0, 0, 0, 0.0); border-radius: 6px; ">
+        <form id="input" action="/input/" method="GET" style="background: rgba(256, 256, 256, 1.0); margin: 0 auto; padding: 3px; border-radius: 6px; border: 2px solid #428bd5;">
+            <div class="equation-edit">
+              <div style="display: inline-block; margin: 0 auto; width: 82%; margin-left: -13px; margin-right: -3px;">{{ form.i }}</div >
+              <div style="display: inline-block;">
+                  <input class="input_field" type="submit" value="=" style="-webkit-appearance: none; background: #428bd5; width: 1.5em; border-radius: 6px; padding-right: -12px; margin-right: -12px;"/>
+              </div>
+            </div>
+        </form>
+    </div>
     <div class="result">
         {% for cell in rLatex %}
             {% show_card cell input %}
         {% endfor %}
     <div>
-    <div class="input result">
-        <form id="input" action="/input/" method="GET">
-            {{ form.i }}<input class="input_field" type="submit" value="=" />
-        </form>
+    <script>
+$(document).on('click', 'a[target="_blank"]', function(ev) {
+  var url;
+
+  ev.preventDefault();
+  url = $(this).attr('href');
+  window.open(url, '_system');
+});
+    </script>
+
+    <!--
+    <div class="feedback">
+    <div style="margin: auto; width: 105px">
+    <button onclick="submitGood()" style="display: inline-block; margin: auto; width: 50px; background: white; color: #00FF00;">&#x2713 Good</button>
+    <button onclick="submitBad()" style="display: inline-block; margin: auto; width: 50px; background: white; color: red;" >&#x2717 Bad</button>
     </div>
+    </div>
+    -->
     <div class="result">
-        <div class="foot"> 
-            See what <a class="wolfram" 
-            href="http://www.wolframalpha.com/input/?i={{wolfram|urlencode}}"> 
-                Wolfram|Alpha</a> has to say. 
-        </div> 
         {% for cell in result %}
             {% show_card cell input %}
         {% endfor %}
      </div>
+        <div class="foot"> 
+            See what <a class="wolfram" target="_blank"
+            href="http://www.wolframalpha.com/input/?i={{wolfram|urlencode}}"> 
+                Wolfram|Alpha</a> has to say. 
+        </div> 
 {% endblock %}
