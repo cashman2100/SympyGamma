@@ -78,7 +78,26 @@ class SymPyGamma(object):
             except ValueError as e:
                 return self.handle_error(s, e)
 
-            return cards
+            reordered_cards = []
+            plot_card = None
+            for c in cards:
+                if c.get('title', None) == 'Antiderivative forms':
+                    c['title'] = 'Integral'
+                if c.get('title', None) == 'SymPy':
+                    c['title'] = 'Result'
+                    if s == c['input']:
+                        continue
+                if 'integrate' in s:
+                    if c.get('title', None) in ['Integral', 'Derivative', 'Alternate forms']:
+                        continue
+                if c.get('card', None) != 'plot':
+                    reordered_cards.append(c)
+                else:
+                    plot_card = c
+            if plot_card is not None:
+                reordered_cards.append(plot_card)
+
+            return reordered_cards
 
     def handle_error(self, s, e):
         if isinstance(e, SyntaxError):
