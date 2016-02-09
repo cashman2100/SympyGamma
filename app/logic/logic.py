@@ -102,6 +102,13 @@ class SymPyGamma(object):
                 if 'integrate' in s:
                     if c.get('title', None) in ['Integral', 'Derivative', 'Alternate forms']:
                         continue
+                if 'summation' in s:
+                    no_show = ['Roots', 'Series expansion around 0',
+                               'Simplification', 'Integral',
+                               'Derivative', 'Alternate forms']
+                    if c.get('title', None) in no_show:
+                        continue
+
                 if c.get('card', None) != 'plot':
                     reordered_cards.append(c)
                 else:
