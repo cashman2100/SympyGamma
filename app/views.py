@@ -25,6 +25,7 @@ import urllib
 import urllib2
 import datetime
 import traceback
+import time 
 
 LIVE_URL = '<a href="http://live.sympy.org">SymPy Live</a>'
 LIVE_PROMOTION_MESSAGES = [
@@ -216,7 +217,6 @@ def input(request, user):
             latex =  raw_in
             # query parameter which can show image on top
             id = request.GET.get('id', '')
-            src = "https://s3.amazonaws.com/mpxresults/" + id + ".png"
             latex_mathjax = ''.join(['<script type="math/tex; mode=display">',
                                    latex,
                               '</script>'])
@@ -235,7 +235,11 @@ def input(request, user):
                 "output": latex_mathjax
                 }]
 
+                
+            t0 = time.time()
             r_new = g.eval(input)
+            t1 = time.time()
+            print("Time evaluating: " + str(t1 - t0))
             if r_new:
                 if r:
                     r.extend(r_new)
@@ -249,19 +253,9 @@ def input(request, user):
                     "output": "Can't handle the input."
                 }]
 
-            if (user and not models.Query.query(
-                    models.Query.text==input,
-                    models.Query.user_id==user.user_id()).get()):
-                query = models.Query(text=input, user_id=user.user_id())
-                query.put()
-            elif not models.Query.query(models.Query.text==input).get():
-                query = models.Query(text=input, user_id=None)
-                query.put()
-
             # For some reason the |random tag always returns the same result
             return ("result.html", {
                 "input": input,
-		"src": src,
                 "wolfram": raw_in,
                 "result": r,
                 "rLatex": rLatex,
