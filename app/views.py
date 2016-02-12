@@ -198,6 +198,36 @@ def index(request, user):
 
 @app_version
 @authenticate
+def fast_input(request, user):
+    if request.method == "GET":
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            latex = form.cleaned_data["i"]
+            # query parameter which can show image on top
+            latex_mathjax = ''.join(['<script type="math/tex; mode=display">',
+                                   latex,
+                              '</script>'])
+
+            rLatex = [{
+            "title": "Input",
+            "input": latex,
+            "output": latex_mathjax
+            }]
+
+            # For some reason the |random tag always returns the same result
+            return ("result.html", {
+                "input": latex,
+                "wolfram": latex,
+                "result": [],
+                "rLatex": rLatex,
+                "form": form,
+                "MEDIA_URL": settings.MEDIA_URL,
+                "promote_live": random.choice(LIVE_PROMOTION_MESSAGES)
+                })
+
+
+@app_version
+@authenticate
 def input(request, user):
     if request.method == "GET":
         form = SearchForm(request.GET)
@@ -216,7 +246,6 @@ def input(request, user):
             # possible query parameter
             latex =  raw_in
             # query parameter which can show image on top
-            id = request.GET.get('id', '')
             latex_mathjax = ''.join(['<script type="math/tex; mode=display">',
                                    latex,
                               '</script>'])

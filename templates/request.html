@@ -82,8 +82,13 @@ Loading
 
     var BASE_BUCKET_URL = "https://s3.amazonaws.com/mpxresults/";
 
-    function renderLatex(latex, id) {
-        $.ajax('/input/', {
+    function renderLatex(stage, latex, id) {
+        if (stage == 0) {
+            path = "/fast_input/";
+        } else {
+            path = "/input/";
+        }
+        $.ajax(path, {
             type: 'get',
             data: {i: latex},
             dataType: 'html',
@@ -91,7 +96,7 @@ Loading
                 if (id) {
                     $("#imgEl").empty();
                     var img = $("<img/>");
-                    img.on('load', function() {$("#spinnerEl").remove();});
+                    //img.on('load', function() {$("#spinnerEl").remove();});
                     img.attr('src', BASE_BUCKET_URL + id + ".jpg");
                     img.attr('class', 'img');
 
@@ -111,9 +116,18 @@ Loading
                     setupVariableChooser();
                 });
 
+                if (stage == 0) {
+                    renderLatex(1, latex, "");
+                }
+
+                if (stage == 1) {
+                    $("#spinnerEl").remove();
+                }
+                    //img.on('load', function() {$("#spinnerEl").remove();});
+
                 $("#input").submit(function( event ) {
                   var latex = $(this).find('input').val()
-                  renderLatex(latex, "");
+                  renderLatex(1, latex, "");
                   event.preventDefault();
                 });
             }
@@ -144,7 +158,7 @@ Loading
                     $("#spinnerEl").remove();
                     $("#errorEl").html(errorMessage);
                 } else {
-                    renderLatex(data.latex, id);
+                    renderLatex(0, data.latex, id);
                 }
             });
     }
