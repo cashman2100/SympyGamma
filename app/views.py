@@ -209,9 +209,9 @@ def fast_input(request, user):
                               '</script>'])
 
             rLatex = [{
-            "title": "Input",
-            "input": latex,
-            "output": latex_mathjax
+                "title": "Input",
+                "input": latex,
+                "output": latex_mathjax
             }]
 
             # For some reason the |random tag always returns the same result
@@ -281,6 +281,8 @@ def input(request, user):
                     "input": input,
                     "output": "Can't handle the input."
                 }]
+
+            r = [elem for elem in r if elem["title"] not in ["Error", "Input"]]
 
             # For some reason the |random tag always returns the same result
             return ("result.html", {
