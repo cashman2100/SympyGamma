@@ -107,14 +107,18 @@ Loading
                 }
                 $("#cardsEl").empty();
                 $("#cardsEl").append(html);
-                evaluateCards().done(function() {
-                    setupPlots();
-                    setupExamples();
-                    setupSavedQueries();
-                    setupFactorization();
-                    setupDidYouMean();
-                    setupVariableChooser();
-                });
+                if (stage == 1) {
+                    evaluateCards().done(function() {
+                        setupPlots();
+                        setupExamples();
+                        setupSavedQueries();
+                        setupFactorization();
+                        setupDidYouMean();
+                        setupVariableChooser();
+                    });
+                } else {
+                    evaluateCards();
+                }
 
                 if (stage == 0) {
                     renderLatex(1, latex, "");
