@@ -237,8 +237,8 @@ def input(request, user):
                 # exponents
                 pre_sym = re.sub(r"(?<!\S)(e)", r"E", raw_in)
                 # sympy doesn't care about 'y =' or 'f(x) =', ignore this
-                pre_sym = pre_sym.replace("y =", "")
-                pre_sym = re.sub(r"[a-zA-Z][\s]*[(][\s]*[xyz][\s]*[)][\s]*[=]", r"", pre_sym)
+                pre_sym = pre_sym.lstrip("y =")
+                pre_sym = re.sub(r"\A[a-zA-Z][\s]*[(][\s]*[xyz][\s]*[)][\s]*[=]", r"", pre_sym)
                 input = process_sympy(pre_sym)
             except:
                 input = raw_in
