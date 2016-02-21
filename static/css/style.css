@@ -155,6 +155,7 @@ h1 a img {
   font-family: 'Open Sans', sans-serif;
   font-size: smaller;
   display: inline-block;
+  -webkit-user-select: none;
 }
 
 .card_options_more {
@@ -202,6 +203,7 @@ h1 a img {
 
 .result_variables button {
   padding: 0.25em 1em;
+  -webkit-user-select: none;
 }
 
 .result_variables button.active {
@@ -916,4 +918,18 @@ td .false {
     margin: 2em auto;
     width: 700px;
   }
+}
+
+/* courtesy of http://stackoverflow.com/a/4448972/2498956 */
+*.unselectable {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+
+  /*
+    Introduced in IE 10.
+    See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+  */
+  -ms-user-select: none;
+  user-select: none;
 }
