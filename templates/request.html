@@ -30,7 +30,7 @@ Loading
   function submitGood() {
     console.log("good submit");
     $.ajax({
-      url: "http://staging.mathpix.net/feedback",
+      url: "http://mathpix.net/feedback",
       data: JSON.stringify({"img_name": "{{ image_id }}", "happy": true}),
       dataType : 'json',
       contentType: "application/json",
@@ -41,15 +41,15 @@ Loading
   }
   function submitBad() {
     console.log("bad submit");
+    $("#feedback").html("<p style='font-size:14px' align='middle'>We'll try to fix your issue ASAP, thank you for helping us improve our algorithms!</p>");
+    });
     $.ajax({
-      url: "http://staging.mathpix.net/feedback",
+      url: "http://mathpix.net/feedback",
       data: JSON.stringify({"img_name": "{{ image_id }}", "happy": false}),
       dataType : 'json',
       contentType: "application/json",
       type: 'POST'
     }).done(function() {
-        $("#feedback").html("<p style='font-size:14px' align='middle'>We'll try to fix your issue ASAP, thank you for helping us improve our algorithms!</p>");
-    });
   }
 </script>
 
