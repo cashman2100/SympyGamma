@@ -122,6 +122,7 @@ def input(request, user):
                 pre_sym = re.sub(r"(?<!\S)(e)", r"E", raw_in)
                 # sympy doesn't care about 'y =' or 'f(x) =', ignore this
                 pre_sym = pre_sym.lstrip("y =")
+                pre_sym = pre_sym.rstrip("=")
                 pre_sym = re.sub(r"\A[a-zA-Z][\s]*[(][\s]*[xyz][\s]*[)][\s]*[=]", r"", pre_sym)
                 input = process_sympy(pre_sym)
             except:
