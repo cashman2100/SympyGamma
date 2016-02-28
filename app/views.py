@@ -119,7 +119,7 @@ def input(request, user):
             raw_in = form.cleaned_data["i"]
             try:
                 # exponents
-                pre_sym = re.sub(r"(?<!\S)(e)", r"E", raw_in)
+                pre_sym = re.sub(r"(?<![a-zA-Z])(e)", r"E", raw_in)
                 # sympy doesn't care about 'y =' or 'f(x) =', ignore this
                 pre_sym = pre_sym.lstrip("y =")
                 pre_sym = pre_sym.rstrip("=")
