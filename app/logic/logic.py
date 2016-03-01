@@ -1,6 +1,7 @@
 import sys
 import traceback
 import collections
+import re
 from utils import Eval, latexify, arguments, removeSymPy, \
     custom_implicit_transformation, synonyms, OTHER_SYMPY_FUNCTIONS, \
     close_matches
@@ -78,7 +79,44 @@ class SymPyGamma(object):
             except ValueError as e:
                 return self.handle_error(s, e)
 
-            return cards
+            def alphanum_counter(s):
+                '''Remove any non-alphanumeric characters from s and return counts'''
+                return collections.Counter(re.sub('\W+', '', s).replace('_', ''))
+
+            reordered_cards = []
+            plot_card = None
+            card_titles = [c.get('title', None) for c in cards]
+            for c in cards:
+                if c.get('title', None) == 'Antiderivative forms':
+                    c['title'] = 'Integral'
+                if c.get('title', None) == 'SymPy':
+                    if 'Result' in card_titles:
+                        continue
+                    c['title'] = 'Result'
+                    prefix = '<script type="math/tex; mode=display">'
+                    suffix = '</script>'
+                    math_output = c['output'].replace(prefix, '').replace(suffix, '')
+                    if alphanum_counter(s) == alphanum_counter(math_output):
+                        continue
+
+                if 'integrate' in s:
+                    if c.get('title', None) in ['Integral', 'Derivative', 'Alternate forms']:
+                        continue
+                if 'summation' in s:
+                    no_show = ['Roots', 'Series expansion around 0',
+                               'Simplification', 'Integral',
+                               'Derivative', 'Alternate forms']
+                    if c.get('title', None) in no_show:
+                        continue
+
+                if c.get('card', None) != 'plot':
+                    reordered_cards.append(c)
+                else:
+                    plot_card = c
+            if plot_card is not None:
+                reordered_cards.append(plot_card)
+
+            return reordered_cards
 
     def handle_error(self, s, e):
         if isinstance(e, SyntaxError):

@@ -5,12 +5,12 @@
  </div>
 {% else %}
  <div class="result_card{% if cell.error or cell.exception_info %} result_card_error{%endif%}">
-   <div class="card_title">
+   <div class="card_title unselectable">
      <a {% if cell.card %} href="#{{ cell.card }}" title="Link to {{ cell.title }} card" id="{{ cell.card }}" {% endif %}>{{ cell.title }}</a>
    </div>
    {% if cell.input %}
     <div class="cell_input">
-      <pre>{{ cell.input|safe }}</pre>
+      <pre></pre>
     </div>
    {% endif %}
    {% if cell.output %}
@@ -23,7 +23,7 @@
       {{ cell.output|safe }}
       {% if cell.num_variables > 1 %}
        <div class="result_variables">
-         <h4>Evaluate with respect to…</h4>
+         <h4 class="unselectable">Evaluate with respect to…</h4>
          <ul data-variable="{{ cell.variable }}">
            {% for variable in cell.variables %}
            <li><button{% if variable == cell.variable %} class="active"{%endif%}>{{ variable }}</button></li>
