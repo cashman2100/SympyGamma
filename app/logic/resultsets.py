@@ -757,7 +757,7 @@ all_cards = {
 
     'digits': ResultCard(
         "Digits in base-10 expansion of number",
-        "len(str(%s))",
+        "len(str(Abs(%s)))",
         no_pre_output,
         multivariate=False,
         format_input_function=format_long_integer),
