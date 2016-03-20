@@ -186,6 +186,13 @@ def request(req, image_id):
         "image_id": image_id
     })
 
+@app_version
+def user_request(req, uuid):
+    return ("user_request.html", {
+        "MEDIA_URL": settings.MEDIA_URL,
+        "uuid": uuid
+    })
+
 def _process_card(request, card_name):
     variable = request.GET.get('variable')
     expression = request.GET.get('expression')

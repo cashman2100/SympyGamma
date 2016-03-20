@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% load extra_tags %}
+{% block title %}
+Loading
+{% endblock %}
+
+{% block content %}
+<br>
+
+<div id = "imgEl">
+</div>
+
+<div id = "cardsEl">
+</div>
+
+<div id = "errorEl">
+</div>
+
+<script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
+
+<script>
+    var BASE_BUCKET_URL = "https://s3.amazonaws.com/mpxresults/";
+
+    function renderLatex(latex, id) {
+        $.ajax('/input/', {
+            type: 'get',
+            data: {i: latex},
+            dataType: 'html',
+            success: function(html) {
+                if (id) {
+                    $("#imgEl").empty();
+                    var img = $("<img/>");
+                    img.attr('src', BASE_BUCKET_URL + id + ".jpg");
+                    img.attr('class', 'img');
+
+                    $("#imgEl").append(
+                        $("<div></div>").attr('align', 'middle')
+                        .append(img)
+                    );
+                }
+                $("#cardsEl").empty();
+                $("#cardsEl").append(html);
+                evaluateCards().done(function() {
+                    setupPlots();
+                    setupExamples();
+                    setupSavedQueries();
+                    setupFactorization();
+                    setupDidYouMean();
+                    setupVariableChooser();
+                });
+
+                $("#input").submit(function( event ) {
+                  var latex = $(this).find('input').val()
+                  renderLatex(latex, "");
+                  event.preventDefault();
+                });
+            }
+        });
+    }
+
+    var uuid = "{{ uuid }}";
+    var ref = new Firebase("https://mathpix.firebaseio.com/results/" + uuid);
+    ref.limitToLast(1).on("child_added", function(snapshot, prevChildKey) {
+        var newPost = snapshot.val();
+        renderLatex(newPost.latex, newPost.session_id);
+    });
+</script>
+{% endblock %}
