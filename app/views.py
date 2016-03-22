@@ -128,7 +128,11 @@ def input(request, user):
                 pre_sym = pre_sym.lstrip("y =")
                 pre_sym = pre_sym.rstrip("=")
                 pre_sym = re.sub(r"\A[a-zA-Z][\s]*[(][\s]*[xyz][\s]*[)][\s]*[=]", r"", pre_sym)
-                input = str(process_sympy(pre_sym))
+                expr = process_sympy(pre_sym)
+                if isinstance(expr, sympy.Eq):
+                    input = 'solve(%s)' % str(expr.args[0] - expr.args[1])
+                else:
+                    input = str(expr)
             except:
                 input = raw_in
 
