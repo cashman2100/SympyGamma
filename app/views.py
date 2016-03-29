@@ -27,6 +27,29 @@ import datetime
 import traceback
 import time 
 
+# latex2sympy returns unevaluated integrals and derivatives,
+# i.e. "Integral(x, x)". SympyGamma wants the evaluated
+# integral: "integrate(x, x)".
+
+# workaround begin
+from sympy.printing.str import StrPrinter
+
+def _print_Integral_workaround(self, expr):
+    def _xab_tostr(xab):
+        if len(xab) == 1:
+            return self._print(xab[0])
+        else:
+            return self._print((xab[0],) + tuple(xab[1:]))
+    L = ', '.join([_xab_tostr(l) for l in expr.limits])
+    return 'integrate(%s, %s)' % (self._print(expr.function), L)
+
+def _print_Derivative_workaround(self, expr):
+    return 'diff(%s)' % ", ".join(map(self._print, expr.args))
+
+StrPrinter._print_Integral = _print_Integral_workaround
+StrPrinter._print_Derivative = _print_Derivative_workaround
+# workaround end
+
 class MobileTextInput(forms.widgets.TextInput):
     def render(self, name, value, attrs=None):
         if attrs is None:
