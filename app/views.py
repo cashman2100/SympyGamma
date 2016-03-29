@@ -46,8 +46,16 @@ def _print_Integral_workaround(self, expr):
 def _print_Derivative_workaround(self, expr):
     return 'diff(%s)' % ", ".join(map(self._print, expr.args))
 
+def _print_Limit_workaround(self, expr):
+    e, z, z0, dir = expr.args
+    if str(dir) == "+":
+        return "limit(%s, %s, %s)" % (e, z, z0)
+    else:
+        return "limit(%s, %s, %s, dir='%s')" % (e, z, z0, dir)
+
 StrPrinter._print_Integral = _print_Integral_workaround
 StrPrinter._print_Derivative = _print_Derivative_workaround
+StrPrinter._print_Limit = _print_Limit_workaround
 # workaround end
 
 class MobileTextInput(forms.widgets.TextInput):
