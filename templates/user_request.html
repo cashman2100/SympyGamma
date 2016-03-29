@@ -6,20 +6,39 @@ Loading
 {% endblock %}
 
 {% block content %}
+<br>
 
-<div id = "cardsEl"></div>
+<div id = "imgEl">
+</div>
 
-<div id = "errorEl"></div>
+<div id = "cardsEl">
+</div>
+
+<div id = "errorEl">
+</div>
 
 <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
 
 <script>
+    var BASE_BUCKET_URL = "https://s3.amazonaws.com/mpxresults/";
+
     function renderLatex(latex, id) {
         $.ajax('/input/', {
             type: 'get',
             data: {i: latex},
             dataType: 'html',
             success: function(html) {
+                if (id) {
+                    $("#imgEl").empty();
+                    var img = $("<img/>");
+                    img.attr('src', BASE_BUCKET_URL + id + ".jpg");
+                    img.attr('class', 'img');
+
+                    $("#imgEl").append(
+                        $("<div></div>").attr('align', 'middle')
+                        .append(img)
+                    );
+                }
                 $("#cardsEl").empty();
                 $("#cardsEl").append(html);
                 evaluateCards().done(function() {
