@@ -152,14 +152,13 @@ def input(request, user):
             # remove question number
             raw_in = re.sub(r"^\s*(?:[a-zA-Z]\s*[\).]|\d+\s*(?:\)|\.(?!\d)))", "", raw_in)
             try:
-                # exponents
-                pre_sym = re.sub(r"(?<![a-zA-Z])(e)", r"E", raw_in)
-
                 # sympy doesn't care about 'y =' or 'f(x) =', ignore this
-                pre_sym = pre_sym.lstrip("y =")
+                pre_sym = raw_in.lstrip("y =")
                 pre_sym = pre_sym.rstrip("=")
                 pre_sym = re.sub(r"\A[a-zA-Z][\s]*[(][\s]*[xyz][\s]*[)][\s]*[=]", r"", pre_sym)
+
                 expr = process_sympy(pre_sym)
+                expr = expr.subs([(sympy.Symbol('e'), sympy.E), (sympy.Symbol('i'), sympy.I)])
                 if isinstance(expr, sympy.Eq):
                     input = 'solve(%s)' % str(expr.args[0] - expr.args[1])
                 else:
