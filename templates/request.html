@@ -11,19 +11,6 @@ Loading
 <div id = "imgEl">
 </div>
 
-<br>
-<div id="feedback" class="feedback">
-    <div style="margin: auto; width: 170px">
-        <button id="feedbackButton" onclick="submitBad()" style="display: inline-block; margin: auto; background: white; color: #000000; background: rgba(256, 256, 256, 1.0); margin: 0 auto; padding: 3px; border-radius: 6px;border: 2px solid #cccccc; height: 31px;">&nbsp;Not quite right? Let us help!&nbsp;</button>
-    </div>
-    <div id="feedback-sent-message" style="display: none">
-        <p style='font-size:14px' align='middle'>
-            We'll try to fix your issue ASAP, thank you for helping us improve our algorithms!
-            Click <a href="http://tutor.mathpix.com/{{ image_id }}">here</a> to get free help.
-        </p>
-    </div>
-</div>
-
 <div id = "cardsEl">
 </div>
 
@@ -32,33 +19,6 @@ Loading
 
 <div id = "errorEl">
 </div>
-
-<script>
-  function submitGood() {
-    console.log("good submit");
-    $.ajax({
-      url: "http://mathpix.net/feedback",
-      data: JSON.stringify({"img_name": "{{ image_id }}", "happy": true}),
-      dataType : 'json',
-      contentType: "application/json",
-      type: 'POST'
-    }).done(function() {
-      // $( this ).addClass( "done" );
-    });
-  }
-  function submitBad() {
-    console.log("bad submit");
-    $("#feedback-sent-message").show();
-    $.ajax({
-      url: "http://mathpix.net/feedback",
-      data: JSON.stringify({"img_name": "{{ image_id }}", "happy": false}),
-      dataType : 'json',
-      contentType: "application/json",
-      type: 'POST'
-    }).done(function() {
-    });
-  }
-</script>
 
 <script>
     // --- Add spinny animation ---
