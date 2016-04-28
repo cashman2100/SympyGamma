@@ -42,9 +42,11 @@ Loading
 
     var uuid = "{{ uuid }}";
     var ref = new Firebase("https://mathpix.firebaseio.com/results/" + uuid);
+    mixpanel.identify(uuid);
     ref.limitToLast(1).on("child_added", function(snapshot, prevChildKey) {
         var newPost = snapshot.val();
         renderLatex(newPost.latex, newPost.session_id);
+        mixpanel.track({result: newPost});
         window.scrollTo(0, 0);
     });
 </script>
