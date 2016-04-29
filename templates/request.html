@@ -127,7 +127,7 @@ Loading
                 }
             })
             .done(function(data) {
-                mixpanel.track("Result", {result: data});
+                mixpanel.track("Result", data);
                 if (data.error.length > 0) {
                     var errorMessage = "<p align='middle'><font color='red'>" + 
                         data.error + "</font></p>";

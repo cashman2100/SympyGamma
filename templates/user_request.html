@@ -46,7 +46,7 @@ Loading
     ref.limitToLast(1).on("child_added", function(snapshot, prevChildKey) {
         var newPost = snapshot.val();
         renderLatex(newPost.latex, newPost.session_id);
-        mixpanel.track("Result", {result: newPost});
+        mixpanel.track("Result", newPost);
         window.scrollTo(0, 0);
     });
 </script>
