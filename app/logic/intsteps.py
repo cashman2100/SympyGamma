@@ -8,7 +8,7 @@ from sympy.integrals.manualintegrate import (
     manualintegrate, _manualintegrate, integral_steps, evaluates,
     ConstantRule, ConstantTimesRule, PowerRule, AddRule, URule,
     PartsRule, CyclicPartsRule, TrigRule, ExpRule, ReciprocalRule, ArctanRule,
-    AlternativeRule, DontKnowRule, RewriteRule
+    AlternativeRule, DontKnowRule, RewriteRule, TrigSubstitutionRule
 )
 
 # Need this to break loops
@@ -64,6 +64,8 @@ class IntegralPrinter(object):
             self.print_Add(rule)
         elif isinstance(rule, URule):
             self.print_U(rule)
+        elif isinstance(rule, TrigSubstitutionRule):
+            self.print_TrigSub(rule)
         elif isinstance(rule, PartsRule):
             self.print_Parts(rule)
         elif isinstance(rule, CyclicPartsRule):
@@ -133,7 +135,7 @@ class IntegralPrinter(object):
     def print_U(self, rule):
         with self.new_step(), self.new_u_vars() as (u, du):
             # commutative always puts the symbol at the end when printed
-            dx = sympy.Symbol('d' + rule.symbol.name, commutative=0)
+            dx = sympy.Symbol('d',commutative=0) * sympy.Symbol(rule.symbol.name, commutative=0)
             self.append("Let {}.".format(
                 self.format_math(sympy.Eq(u, rule.u_func))))
             self.append("Then let {} and substitute {}:".format(
@@ -152,6 +154,26 @@ class IntegralPrinter(object):
                 self.format_math(u)))
 
             self.append(self.format_math_display(_manualintegrate(rule)))
+
+    def print_TrigSub(self, rule):
+        with self.new_step():
+            self.append("Use trig substitution:")
+            
+            dx = sympy.Symbol('d', commutative=0) * sympy.Symbol(rule.symbol.name, commutative=0)
+            dtheta = sympy.Symbol('d', commutative=0) * sympy.Symbol(rule.theta.name,commutative=0)
+            dx_sub = rule.func.diff(rule.theta) * dtheta
+            self.append("Let {} and {}.".format(
+                self.format_math(sympy.Eq(rule.symbol, rule.func)),
+                self.format_math(sympy.Eq(dx, dx_sub))))
+
+            integrand = rule.context.subs(rule.symbol, rule.func)
+            self.append("Therefore {}, so the integral can be rewritten as {}".format(
+                self.format_math(sympy.Eq(rule.context, integrand)),
+                self.format_math_display(
+                    sympy.Integral(rule.rewritten, rule.theta))))
+
+            with self.new_level():
+                self.print_rule(rule.substep)
 
     def print_Parts(self, rule):
         with self.new_step():
