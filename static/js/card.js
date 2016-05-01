@@ -203,15 +203,6 @@ var Card = (function() {
                             $(this).next().slideToggle();
                             $(this).toggleClass('shown');
                         });
-
-                        var steps = card.element.find('.steps').parent();
-
-                        var button = $("<button>Fullscreen</button>");
-                        button.click($.proxy(function() {
-                            this.toggleFullscreen();
-                        }, card));
-
-                        steps.prepend(button);
                     }
                 });
             }
