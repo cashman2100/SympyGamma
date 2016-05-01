@@ -163,7 +163,7 @@ def input(request, user):
                 wild = sympy.Wild('w')
                 expr = expr.replace(wild ** sympy.Symbol('circ'), (sympy.pi / 180) * wild)
                 if isinstance(expr, sympy.Eq):
-                    input = 'solve(%s)' % str(expr.args[0] - expr.args[1])
+                    input = 'solve(%s,dict=True)' % str(expr.args[0] - expr.args[1])
                 else:
                     input = str(expr)
             except:
