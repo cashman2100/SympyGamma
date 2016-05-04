@@ -156,7 +156,7 @@ def input(request, user):
                 pre_sym = raw_in.lstrip("y =")
                 pre_sym = pre_sym.rstrip("=")
                 pre_sym = re.sub(r"\A[a-zA-Z][\s]*[(][\s]*[xyz][\s]*[)][\s]*[=]", r"", pre_sym)
-                pre_sym = re.sub(r"\.\s*\Z", r"", pre_sym)
+                pre_sym = re.sub(r"[.,]+\s*\Z", r"", pre_sym)
 
                 expr = process_sympy(pre_sym)
                 expr = expr.subs([(sympy.Symbol('e'), sympy.E), (sympy.Symbol('i'), sympy.I)])
