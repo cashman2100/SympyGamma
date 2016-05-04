@@ -27,6 +27,37 @@ import datetime
 import traceback
 import time 
 
+# latex2sympy returns unevaluated integrals and derivatives,
+# i.e. "Integral(x, x)". SympyGamma wants the evaluated
+# integral: "integrate(x, x)".
+
+# workaround begin
+from sympy.printing.str import StrPrinter
+
+def _print_Integral_workaround(self, expr):
+    def _xab_tostr(xab):
+        if len(xab) == 1:
+            return self._print(xab[0])
+        else:
+            return self._print((xab[0],) + tuple(xab[1:]))
+    L = ', '.join([_xab_tostr(l) for l in expr.limits])
+    return 'integrate(%s, %s)' % (self._print(expr.function), L)
+
+def _print_Derivative_workaround(self, expr):
+    return 'diff(%s)' % ", ".join(map(self._print, expr.args))
+
+def _print_Limit_workaround(self, expr):
+    e, z, z0, dir = expr.args
+    if str(dir) == "+":
+        return "limit(%s, %s, %s)" % (e, z, z0)
+    else:
+        return "limit(%s, %s, %s, dir='%s')" % (e, z, z0, dir)
+
+StrPrinter._print_Integral = _print_Integral_workaround
+StrPrinter._print_Derivative = _print_Derivative_workaround
+StrPrinter._print_Limit = _print_Limit_workaround
+# workaround end
+
 class MobileTextInput(forms.widgets.TextInput):
     def render(self, name, value, attrs=None):
         if attrs is None:
@@ -117,14 +148,24 @@ def input(request, user):
         form = SearchForm(request.GET)
         if form.is_valid():
             raw_in = form.cleaned_data["i"]
+
+            # remove question number
+            raw_in = re.sub(r"^\s*(?:[a-zA-Z]\s*[\).]|\d+\s*(?:\)|\.(?!\d)))", "", raw_in)
             try:
-                # exponents
-                pre_sym = re.sub(r"(?<![a-zA-Z])(e)", r"E", raw_in)
                 # sympy doesn't care about 'y =' or 'f(x) =', ignore this
-                pre_sym = pre_sym.lstrip("y =")
+                pre_sym = raw_in.lstrip("y =")
                 pre_sym = pre_sym.rstrip("=")
                 pre_sym = re.sub(r"\A[a-zA-Z][\s]*[(][\s]*[xyz][\s]*[)][\s]*[=]", r"", pre_sym)
-                input = process_sympy(pre_sym)
+                pre_sym = re.sub(r"[.,]+\s*\Z", r"", pre_sym)
+
+                expr = process_sympy(pre_sym)
+                expr = expr.subs([(sympy.Symbol('e'), sympy.E), (sympy.Symbol('i'), sympy.I)])
+                wild = sympy.Wild('w')
+                expr = expr.replace(wild ** sympy.Symbol('circ'), (sympy.pi / 180) * wild)
+                if isinstance(expr, sympy.Eq):
+                    input = 'solve(%s,dict=True)' % str(expr.args[0] - expr.args[1])
+                else:
+                    input = str(expr)
             except:
                 input = raw_in
 
@@ -184,6 +225,13 @@ def request(req, image_id):
     return ("request.html", {
         "MEDIA_URL": settings.MEDIA_URL,
         "image_id": image_id
+    })
+
+@app_version
+def user_request(req, uuid):
+    return ("user_request.html", {
+        "MEDIA_URL": settings.MEDIA_URL,
+        "uuid": uuid
     })
 
 def _process_card(request, card_name):

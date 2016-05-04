@@ -4,11 +4,10 @@
 
 body {
   font-family: 'Open Sans', sans-serif;
-  font-size: 100%;
   padding: 0;
   margin: 0;
-  background-color: #eee;
-  }
+  background-color: rgba(238, 238, 238, 0.24);
+}
 
 pre, ul, button, h2, h3, h4, input, label {
   margin: 0;
@@ -72,6 +71,8 @@ h1 a img {
   margin: 10px;
   padding: 10px;
   background: #FFF;
+  border: rgba(0, 0, 0, 0.2) 1px solid !important;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.16) !important;
 }
 
 .did_you_mean {
@@ -932,4 +933,16 @@ td .false {
   */
   -ms-user-select: none;
   user-select: none;
+}
+
+.feedback-btn {
+    display: inline-block;
+    margin: auto;
+    width: 50px;
+}
+.feedback-btn.good {
+    background-color: rgb(0, 209, 61);
+}
+.feedback-btn.bad {
+    background-color: rgb(230, 1, 1);
 }

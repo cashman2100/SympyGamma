@@ -1,4 +1,39 @@
 {% load extra_tags %}
+<div style="text-align: center">
+    Note: we currently only support single equations, black ink on white background.
+</div>
+
+<div class="feedback" id="feedback">
+    <div id="feedback-options" style="margin: auto; width: 105px">
+        <button onclick="submitGood()" class="feedback-btn good">Good</button>
+        <button onclick="submitBad()" class="feedback-btn bad" >Bad</button>
+    </div>
+    <div id="good-feedback-message" style="display: none">
+        <p style='font-size:14px' align='middle'>
+            Glad we could help!
+        </p>
+    </div>
+    <div id="bad-feedback-message" style="display: none">
+        <p style='font-size:14px' align='middle'>
+            We'll try to fix your issue ASAP, thank you for helping us improve our algorithms!
+        </p>
+    </div>
+</div>
+
+<script>
+    function submitGood() {
+        mixpanel.track("Good result");
+        $("#good-feedback-message").show();
+        $("#feedback-options").hide();
+        $("#bad-feedback-message").hide();
+    }
+    function submitBad() {
+        mixpanel.track("Bad result");
+        $("#bad-feedback-message").show();
+        $("#good-feedback-message").hide();
+        $("#feedback-options").hide();
+    }
+</script>
 
 {% block content %}
 
@@ -19,6 +54,11 @@
         {% endfor %}
     <div>
     <script>
+
+$("#input").on('click', function(ev) {
+    mixpanel.track("Edit");
+});
+
 $(document).on('click', 'a[target="_blank"]', function(ev) {
   var url;
 
@@ -28,16 +68,13 @@ $(document).on('click', 'a[target="_blank"]', function(ev) {
 });
     </script>
 
-
-    <div class="foot"> 
-        See what <a class="wolfram" target="_blank"
-        href="http://m.wolframalpha.com/input/?i={{wolfram|urlencode}}"> 
-            Wolfram|Alpha</a> has to say. 
-    </div> 
-
     <div class="result">
         {% for cell in result %}
             {% show_card cell input %}
         {% endfor %}
      </div>
+    <div class="foot"> 
+        Powered by SymPy
+        <img style="max-height: 30px; vertical-align: middle" src="/static/images/logo.png">
+    </div> 
 {% endblock %}

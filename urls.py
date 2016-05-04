@@ -13,6 +13,7 @@ urlpatterns = patterns(
     (r'^input/', 'app.views.input'),
     (r'^fast_input/', 'app.views.fast_input'),
     (r'^request/(?P<image_id>\w*)$', 'app.views.request'),
+    (r'^user/(?P<uuid>[\w-]*)$', 'app.views.user_request'),
     (r'card/(?P<card_name>\w*)$', 'app.views.eval_card'),
     (r'card_info/(?P<card_name>\w*)$', 'app.views.get_card_info'),
     (r'card_full/(?P<card_name>\w*)$', 'app.views.get_card_full')

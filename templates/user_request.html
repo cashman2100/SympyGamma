@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% load extra_tags %}
+{% block title %}
+Loading
+{% endblock %}
+
+{% block content %}
+
+<div id = "cardsEl"></div>
+
+<div id = "errorEl"></div>
+
+<script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
+
+<script>
+    function renderLatex(latex, id) {
+        $.ajax('/input/', {
+            type: 'get',
+            data: {i: latex},
+            dataType: 'html',
+            success: function(html) {
+                $("#cardsEl").empty();
+                $("#cardsEl").append(html);
+                evaluateCards().done(function() {
+                    setupPlots();
+                    setupExamples();
+                    setupSavedQueries();
+                    setupFactorization();
+                    setupDidYouMean();
+                    setupVariableChooser();
+                });
+
+                $("#input").submit(function( event ) {
+                  var latex = $(this).find('input').val()
+                  renderLatex(latex, "");
+                  event.preventDefault();
+                });
+            }
+        });
+    }
+
+    var uuid = "{{ uuid }}";
+    var ref = new Firebase("https://mathpix.firebaseio.com/results/" + uuid);
+    mixpanel.identify(uuid);
+    ref.limitToLast(1).on("child_added", function(snapshot, prevChildKey) {
+        var newPost = snapshot.val();
+        renderLatex(newPost.latex, newPost.session_id);
+        mixpanel.track("Result", newPost);
+        window.scrollTo(0, 0);
+    });
+</script>
+{% endblock %}
