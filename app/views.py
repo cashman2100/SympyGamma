@@ -150,13 +150,13 @@ def input(request, user):
             raw_in = form.cleaned_data["i"]
 
             # remove question number
+            raw_in = raw_in.rstrip("=")
             raw_in = re.sub(r"^\s*(?:[a-zA-Z]\s*[\).]|\d+\s*(?:\)|\.(?!\d)))", "", raw_in)
+            raw_in = re.sub(r"[.,]+\s*\Z", r"", raw_in)
             try:
                 # sympy doesn't care about 'y =' or 'f(x) =', ignore this
                 pre_sym = raw_in.lstrip("y =")
-                pre_sym = pre_sym.rstrip("=")
                 pre_sym = re.sub(r"\A[a-zA-Z][\s]*[(][\s]*[xyz][\s]*[)][\s]*[=]", r"", pre_sym)
-                pre_sym = re.sub(r"[.,]+\s*\Z", r"", pre_sym)
 
                 expr = process_sympy(pre_sym)
                 expr = expr.subs([(sympy.Symbol('e'), sympy.E), (sympy.Symbol('i'), sympy.I)])
