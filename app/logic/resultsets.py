@@ -4,7 +4,6 @@ import itertools
 import sympy
 from sympy.core.function import FunctionClass
 from sympy.core.symbol import Symbol
-import docutils.core
 import diffsteps
 import intsteps
 
@@ -373,10 +372,6 @@ def format_integral(line, result, components):
 
     return line.format(_var=limits) % components['integrand']
 
-def format_function_docs_input(line, function, components):
-    function = getattr(components['input_evaluated'], '__name__', str(function))
-    return line % function
-
 def format_dict_title(*title):
     def _format_dict(dictionary, formatter):
         html = ['<table>',
@@ -672,10 +667,6 @@ def trim(docstring):
     # Return a single string:
     return '\n'.join(trimmed)
 
-def eval_function_docs(evaluator, components, parameters=None):
-    docstring = trim(evaluator.get("input_evaluated").__doc__)
-    return docutils.core.publish_parts(docstring, writer_name='html4css1',
-                                       settings_overrides={'_disable_config': True})['html_body']
 
 def eval_truth_table(evaluator, components, parameters=None):
     expr = evaluator.get("input_evaluated")
@@ -845,16 +836,6 @@ all_cards = {
         eval_method=eval_plot,
         parameters=['xmin', 'xmax', 'tmin', 'tmax', 'pmin', 'pmax']),
 
-    'function_docs': FakeResultCard(
-        "Documentation",
-        "help(%s)",
-        no_pre_output,
-        multivariate=False,
-        eval_method=eval_function_docs,
-        format_input_function=format_function_docs_input,
-        format_output_function=format_nothing
-    ),
-
     'root_to_polynomial': ResultCard(
         "Polynomial with this root",
         "minpoly(%s)",
@@ -966,7 +947,6 @@ result_sets = [
     ('integrate', extract_integral, ['integral_alternate_fake', 'intsteps']),
     ('diff', extract_derivative, ['diff', 'diffsteps']),
     ('factorint', extract_first, ['factorization', 'factorizationDiagram']),
-    ('help', extract_first, ['function_docs']),
     ('plot', extract_plot, ['plot']),
     ('rsolve', None, None),
     ('product', None, []),  # suppress automatic Result card
@@ -975,7 +955,6 @@ result_sets = [
     (is_rational, None, ['float_approximation']),
     (is_float, None, ['fractional_approximation']),
     (is_approximatable_constant, None, ['root_to_polynomial']),
-    (is_uncalled_function, None, ['function_docs']),
     (is_trig, None, ['trig_alternate']),
     (is_matrix, None, ['matrix_inverse', 'matrix_eigenvals', 'matrix_eigenvectors']),
     (is_logic, None, ['satisfiable', 'truth_table']),
