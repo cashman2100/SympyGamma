@@ -58,6 +58,23 @@ StrPrinter._print_Derivative = _print_Derivative_workaround
 StrPrinter._print_Limit = _print_Limit_workaround
 # workaround end
 
+# better solution printing
+from sympy.printing.latex import LatexPrinter
+
+def _print_dict_better(self, d):
+    if len(d) == 1 and isinstance(d.keys()[0], sympy.Symbol):
+        key = d.keys()[0]
+        return "%s = %s" % (key, d[key])
+    keys = sorted(d.keys(), key=default_sort_key)
+    items = []
+
+    for key in keys:
+        val = d[key]
+        items.append("%s : %s" % (self._print(key), self._print(val)))
+
+    return r"\left \{ %s\right \}" % r", \quad ".join(items)
+LatexPrinter._print_dict = _print_dict_better
+
 class MobileTextInput(forms.widgets.TextInput):
     def render(self, name, value, attrs=None):
         if attrs is None:
