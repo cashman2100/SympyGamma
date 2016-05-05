@@ -64,7 +64,7 @@ from sympy.printing.latex import LatexPrinter
 def _print_dict_better(self, d):
     if len(d) == 1 and isinstance(d.keys()[0], sympy.Symbol):
         key = d.keys()[0]
-        return "%s = %s" % (key, d[key])
+        return "%s = %s" % (self._print(key), self._print(d[key]))
     keys = sorted(d.keys(), key=default_sort_key)
     items = []
 
