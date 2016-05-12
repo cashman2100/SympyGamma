@@ -14,7 +14,7 @@ Loading
 <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
 
 <script>
-    function renderLatex(latex, id) {
+    function setLatex(latex) {
         $.ajax('/input/', {
             type: 'get',
             data: {i: latex},
@@ -30,22 +30,21 @@ Loading
                     setupDidYouMean();
                     setupVariableChooser();
                 });
-
-                $("#input").submit(function( event ) {
-                  var latex = $(this).find('input').val()
-                  renderLatex(latex, "");
-                  event.preventDefault();
-                });
             }
         });
     }
+    $("#input").submit(function( event ) {
+        var latex = $(this).find('input').val()
+        setLatex(latex);
+        event.preventDefault();
+    });
 
     var uuid = "{{ uuid }}";
     var ref = new Firebase("https://mathpix.firebaseio.com/results/" + uuid);
     mixpanel.identify(uuid);
     ref.limitToLast(1).on("child_added", function(snapshot, prevChildKey) {
         var newPost = snapshot.val();
-        renderLatex(newPost.latex, newPost.session_id);
+        setLatex(newPost.latex);
         mixpanel.track("Result", newPost);
         window.scrollTo(0, 0);
     });

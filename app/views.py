@@ -183,7 +183,8 @@ def input(request, user):
                     input = 'solve(%s,dict=True)' % str(expr.args[0] - expr.args[1])
                 else:
                     input = str(expr)
-            except:
+            except Exception as e:
+                print(e)
                 input = raw_in
 
             # possible query parameter
