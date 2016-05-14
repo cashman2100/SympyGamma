@@ -271,54 +271,6 @@ def extract_derivative(arguments, evaluated):
         'input_evaluated': arguments[1][0]
     }
 
-def extract_plot(arguments, evaluated):
-    result = {}
-    if arguments.args:
-        if isinstance(arguments.args[0], sympy.Basic):
-            result['variables'] = list(arguments.args[0].atoms(sympy.Symbol))
-            result['variable'] = result['variables'][0]
-            result['input_evaluated'] = [arguments.args[0]]
-
-            if len(result['variables']) != 1:
-                raise ValueError("Cannot plot function of multiple variables")
-        else:
-            variables = set()
-            try:
-                for func in arguments.args[0]:
-                    variables.update(func.atoms(sympy.Symbol))
-            except TypeError:
-                raise ValueError("plot() accepts either one function, a list of functions, or keyword arguments")
-
-            variables = list(variables)
-            if len(variables) > 1:
-                raise ValueError('All functions must have the same and at most one variable')
-            if len(variables) == 0:
-                variables.append(sympy.Symbol('x'))
-            result['variables'] = variables
-            result['variable'] = variables[0]
-            result['input_evaluated'] = arguments.args[0]
-    elif arguments.kwargs:
-        result['variables'] = [sympy.Symbol('x')]
-        result['variable'] = sympy.Symbol('x')
-
-        parametrics = 1
-        functions = {}
-        for f in arguments.kwargs:
-            if f.startswith('x'):
-                y_key = 'y' + f[1:]
-                if y_key in arguments.kwargs:
-                    # Parametric
-                    x = arguments.kwargs[f]
-                    y = arguments.kwargs[y_key]
-                    functions['p' + str(parametrics)] = (x, y)
-                    parametrics += 1
-            else:
-                if f.startswith('y') and ('x' + f[1:]) in arguments.kwargs:
-                    continue
-                functions[f] = arguments.kwargs[f]
-        result['input_evaluated'] = functions
-    return result
-
 # Formatting functions
 
 _function_formatters = {}
@@ -466,32 +418,6 @@ def format_factorization_diagram(factors, formatter):
         primes.extend([prime] * times)
     return DIAGRAM_CODE.format(primes=primes)
 
-PLOTTING_CODE = """
-<div class="plot" style="width: 90%;"
-     data-variable="{variable}">
-<div class="graphs">{graphs}</div>
-</div>
-"""
-
-def format_plot(plot_data, formatter):
-    return PLOTTING_CODE.format(**plot_data)
-
-def format_plot_input(result_statement, input_repr, components):
-    if 'input_evaluated' in components:
-        functions = components['input_evaluated']
-        if isinstance(functions, list):
-            functions = ['<span>{}</span>'.format(f) for f in functions]
-            if len(functions) > 1:
-                return 'plot([{}])'.format(', '.join(functions))
-            else:
-                return 'plot({})'.format(functions[0])
-        elif isinstance(functions, dict):
-            return 'plot({})'.format(', '.join(
-                '<span>{}={}</span>'.format(y, x)
-                for y, x in functions.items()))
-    else:
-        return 'plot({})'.format(input_repr)
-
 GRAPH_TYPES = {
     'xy': [lambda x, y: x, lambda x, y: y],
     'parametric': [lambda x, y: x, lambda x, y: y],
@@ -507,91 +433,6 @@ def determine_graph_type(key):
     else:
         return 'xy'
 
-def eval_plot(evaluator, components, parameters=None):
-    if parameters is None:
-        parameters = {}
-
-    xmin, xmax = parameters.get('xmin', -10), parameters.get('xmax', 10)
-    pmin, pmax = parameters.get('tmin', 0), parameters.get('tmax', 2 * sympy.pi)
-    tmin, tmax = parameters.get('tmin', 0), parameters.get('tmax', 10)
-    from sympy.plotting.plot import LineOver1DRangeSeries, Parametric2DLineSeries
-    functions = evaluator.get("input_evaluated")
-    if isinstance(functions, sympy.Basic):
-        functions = [(functions, 'xy')]
-    elif isinstance(functions, list):
-        functions = [(f, 'xy') for f in functions]
-    elif isinstance(functions, dict):
-        functions = [(f, determine_graph_type(key)) for key, f in functions.items()]
-
-    graphs = []
-    for func, graph_type in functions:
-        if graph_type == 'parametric':
-            x_func, y_func = func
-            x_vars, y_vars = x_func.free_symbols, y_func.free_symbols
-            variables = x_vars.union(y_vars)
-            if x_vars != y_vars:
-                raise ValueError("Both functions in a parametric plot must have the same variable")
-        else:
-            variables = func.free_symbols
-
-        if len(variables) > 1:
-            raise ValueError("Cannot plot multivariate function")
-        elif len(variables) == 0:
-            variable = sympy.Symbol('x')
-        else:
-            variable = list(variables)[0]
-
-        try:
-            if graph_type == 'xy':
-                graph_range = (variable, xmin, xmax)
-            elif graph_type == 'polar':
-                graph_range = (variable, pmin, pmax)
-            elif graph_type == 'parametric':
-                graph_range = (variable, tmin, tmax)
-
-            if graph_type in ('xy', 'polar'):
-                series = LineOver1DRangeSeries(func, graph_range, nb_of_points=150)
-            elif graph_type == 'parametric':
-                series = Parametric2DLineSeries(x_func, y_func, graph_range, nb_of_points=150)
-            # returns a list of [[x,y], [next_x, next_y]] pairs
-            series = series.get_segments()
-        except TypeError:
-            raise ValueError("Cannot plot function")
-
-        xvalues = []
-        yvalues = []
-
-        def limit_y(y):
-            CEILING = 1e8
-            if y > CEILING:
-                y = CEILING
-            if y < -CEILING:
-                y = -CEILING
-            return y
-
-        x_transform, y_transform = GRAPH_TYPES[graph_type]
-        series.append([series[-1][1], None])
-        for point in series:
-            if point[0][1] is None:
-                continue
-            x = point[0][0]
-            y = limit_y(point[0][1])
-            xvalues.append(x_transform(x, y))
-            yvalues.append(y_transform(x, y))
-
-        graphs.append({
-            'type': graph_type,
-            'function': sympy.jscode(sympy.sympify(func)),
-            'points': {
-                'x': xvalues,
-                'y': yvalues
-            },
-            'data': None
-        })
-    return {
-        'variable': repr(variable),
-        'graphs': json.dumps(graphs)
-    }
 
 def eval_factorization(evaluator, components, parameters=None):
     number = evaluator.get("input_evaluated")
@@ -827,15 +668,6 @@ all_cards = {
         multivariate=False
     ),
 
-    'plot': FakeResultCard(
-        "Plot",
-        "plot(%s)",
-        no_pre_output,
-        format_input_function=format_plot_input,
-        format_output_function=format_plot,
-        eval_method=eval_plot,
-        parameters=['xmin', 'xmax', 'tmin', 'tmax', 'pmin', 'pmax']),
-
     'root_to_polynomial': ResultCard(
         "Polynomial with this root",
         "minpoly(%s)",
@@ -947,7 +779,6 @@ result_sets = [
     ('integrate', extract_integral, ['integral_alternate_fake', 'intsteps']),
     ('diff', extract_derivative, ['diff', 'diffsteps']),
     ('factorint', extract_first, ['factorization', 'factorizationDiagram']),
-    ('plot', extract_plot, ['plot']),
     ('rsolve', None, None),
     ('product', None, []),  # suppress automatic Result card
     (is_integer, None, ['digits', 'factorization', 'factorizationDiagram']),
@@ -962,7 +793,7 @@ result_sets = [
     (is_product, None, ['doit']),
     (is_sum, None, None),
     (is_product, None, None),
-    (is_not_constant_basic, None, ['plot', 'roots', 'diff', 'integral_alternate', 'series'])
+    (is_not_constant_basic, None, ['roots', 'diff', 'integral_alternate', 'series'])
 ]
 
 learn_more_sets = {
