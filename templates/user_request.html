@@ -39,14 +39,14 @@ Loading
                     setupDidYouMean();
                     setupVariableChooser();
                 });
+                $("#input").submit(function( event ) {
+                    var latex = $(this).find('input').val()
+                    setLatex(latex);
+                    event.preventDefault();
+                });
             }
         });
     }
-    $("#input").submit(function( event ) {
-        var latex = $(this).find('input').val()
-        setLatex(latex);
-        event.preventDefault();
-    });
 
     var uuid = "{{ uuid }}";
     var ref = new Firebase("https://mathpix.firebaseio.com/results/" + uuid);
