@@ -14,12 +14,21 @@ Loading
 <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
 
 <script>
+    var currentRequest = null;
     function setLatex(latex) {
-        $.ajax('/input/', {
+        if (currentRequest != null) {
+            try {
+                console.log("Canceled pending request");
+                currentRequest.abort();
+            } catch (err) {}
+        }
+        currentRequest = $.ajax('/input/', {
             type: 'get',
             data: {i: latex},
             dataType: 'html',
             success: function(html) {
+                currentRequest = null;
+
                 $("#cardsEl").empty();
                 $("#cardsEl").append(html);
                 evaluateCards().done(function() {
