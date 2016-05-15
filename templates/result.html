@@ -53,7 +53,9 @@
     <script>
 
 $("#input").on('click', function(ev) {
-    mixpanel.track("Edit");
+    mixpanel.track("Edit", {
+        "latex": $('#input input').val()
+    });
 });
 
 $(document).on('click', 'a[target="_blank"]', function(ev) {
