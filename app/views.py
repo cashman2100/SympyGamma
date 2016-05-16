@@ -172,7 +172,10 @@ def input(request, user):
             raw_in = re.sub(r"[.,]+\s*\Z", r"", raw_in)
             try:
                 # sympy doesn't care about 'y =' or 'f(x) =', ignore this
-                pre_sym = raw_in.lstrip("y =")
+                pre_sym = raw_in
+                if pre_sym.startswith("y ="):
+                    pre_sym = pre_sym[len("y ="):]
+
                 pre_sym = re.sub(r"\A[a-zA-Z][\s]*[(][\s]*[xyz][\s]*[)][\s]*[=]", r"", pre_sym)
 
                 expr = process_sympy(pre_sym)
