@@ -216,10 +216,16 @@ def is_product(input_evaluated):
     return isinstance(input_evaluated, sympy.Product)
 
 def is_factorable(input_evaluated):
-    return sympy.factor(input_evaluated) != input_evaluated
+    try:
+        return sympy.factor(input_evaluated) != input_evaluated
+    except Exception:
+        return False
 
 def is_series_useful(input_evaluated):
-    return is_not_constant_basic(input_evaluated) and sympy.series(input_evaluated) != input_evaluated
+    try:
+        return is_not_constant_basic(input_evaluated) and sympy.series(input_evaluated) != input_evaluated
+    except Exception:
+        return False
 
 
 # Functions to convert input and extract variable used
