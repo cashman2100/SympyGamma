@@ -215,6 +215,12 @@ def is_sum(input_evaluated):
 def is_product(input_evaluated):
     return isinstance(input_evaluated, sympy.Product)
 
+def is_factorable(input_evaluated):
+    return sympy.factor(input_evaluated) != input_evaluated
+
+def is_series_useful(input_evaluated):
+    return is_not_constant_basic(input_evaluated) and sympy.series(input_evaluated) != input_evaluated
+
 
 # Functions to convert input and extract variable used
 
@@ -587,6 +593,11 @@ all_cards = {
         "series(%s, {_var}, 0, 10)",
         no_pre_output),
 
+    'factor': ResultCard(
+        "Factorization",
+        "factor(%s)",
+        no_pre_output),
+
     'digits': ResultCard(
         "Digits in base-10 expansion of number",
         "len(str(Abs(%s)))",
@@ -793,7 +804,9 @@ result_sets = [
     (is_product, None, ['doit']),
     (is_sum, None, None),
     (is_product, None, None),
-    (is_not_constant_basic, None, ['roots', 'diff', 'integral_alternate', 'series'])
+    (is_not_constant_basic, None, ['roots', 'diff', 'integral_alternate']),
+    (is_series_useful, None, ['series']),
+    (is_factorable, None, ['factor'])
 ]
 
 learn_more_sets = {
