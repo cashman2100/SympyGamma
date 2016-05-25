@@ -939,10 +939,18 @@ td .false {
     display: inline-block;
     margin: auto;
     width: 50px;
+    background-color: white;
+    color: black;
+    border-radius: 3px;
 }
+
+.feedback-btn:hover {
+    background-color: white;
+}
+
 .feedback-btn.good {
-    background-color: rgb(0, 209, 61);
+    border: rgb(0, 209, 61) 2.5px solid;
 }
 .feedback-btn.bad {
-    background-color: rgb(230, 1, 1);
+    border: rgb(230, 1, 1) 2.5px solid;
 }
