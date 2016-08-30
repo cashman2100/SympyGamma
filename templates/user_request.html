@@ -15,6 +15,26 @@ Loading
 
 <script>
     var currentRequest = null;
+    function showInputCard(latex) {
+        var card = $(
+            '<div class="result_card no_actions">' +
+                '<div class="card_title unselectable">' + 
+                    '<a>Input</a>' +
+                '</div>' +
+                '<div class="cell_input"></div>' +
+                '<div class="cell_output">' +
+                '</div>' +
+            '</div>'
+        );
+
+        card.find('.cell_output').text('$$' + latex + '$$');
+
+        $('.result-cards').empty();
+        $('.result-cards').append(card);
+
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub, card[0]]);
+    }
+
     function setLatex(latex) {
         if (currentRequest != null) {
             try {
@@ -22,6 +42,11 @@ Loading
                 currentRequest.abort();
             } catch (err) {}
         }
+
+        if ($('.result').length) {
+            showInputCard(latex); 
+        }
+
         currentRequest = $.ajax('/input/', {
             type: 'get',
             data: {i: latex},
