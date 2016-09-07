@@ -6,6 +6,7 @@ from sympy.core.function import FunctionClass
 from sympy.core.symbol import Symbol
 import diffsteps
 import intsteps
+import algsteps
 
 
 class ResultCard(object):
@@ -54,7 +55,8 @@ class ResultCard(object):
         if 'format_input_function' in self.card_info:
             return self.card_info['format_input_function'](
                 self.result_statement, input_repr, components)
-        return self.result_statement.format(_var=variable, **parameters) % input_repr
+        fmt = self.result_statement.format(_var=variable, **parameters)
+        return fmt % input_repr
 
     def format_output(self, output, formatter):
         if 'format_output_function' in self.card_info:
@@ -283,6 +285,21 @@ def extract_derivative(arguments, evaluated):
         'input_evaluated': arguments[1][0]
     }
 
+def extract_alg(arguments, evaluated):
+    solve_var = Symbol('x')
+    variables = []
+    try:
+        variables = list(arguments.args[0].free_symbols)
+        solve_var = variables[0]
+    except Exception:
+        pass
+
+    return {
+        'eq': arguments.args[0],
+        'variables': variables,
+        'variable': solve_var
+    }
+
 # Formatting functions
 
 _function_formatters = {}
@@ -489,6 +506,12 @@ def eval_diffsteps(evaluator, components, parameters=None):
     return diffsteps.print_html_steps(function,
                                       components['variable'])
 
+def eval_algsteps(evaluator, components, parameters=None):
+    print(components)
+    eq = components['eq']
+    var = components['variable']
+    return algsteps.print_html_steps(eq, var)
+
 def eval_intsteps(evaluator, components, parameters=None):
     integrand = components.get('integrand', evaluator.get('input_evaluated'))
 
@@ -593,6 +616,13 @@ all_cards = {
         format_output_function=format_steps,
         eval_method=eval_intsteps,
         format_input_function=format_integral),
+
+    'algsteps': FakeResultCard(
+        "Solving Steps",
+        "solve(%s)", # TODO: found out what this is
+        no_pre_output,
+        format_output_function=format_steps,
+        eval_method=eval_algsteps),
 
     'series': ResultCard(
         "Series expansion around 0",
@@ -795,6 +825,7 @@ result_cards: None or list
 result_sets = [
     ('integrate', extract_integral, ['integral_alternate_fake', 'intsteps']),
     ('diff', extract_derivative, ['diff', 'diffsteps']),
+    ('solve', extract_alg, ['algsteps']),
     ('factorint', extract_first, ['factorization', 'factorizationDiagram']),
     ('rsolve', None, None),
     ('product', None, []),  # suppress automatic Result card
