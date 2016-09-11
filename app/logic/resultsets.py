@@ -436,7 +436,7 @@ def format_approximator(approximation, formatter):
 DIAGRAM_CODE = """
 <div class="factorization-diagram" data-primes="{primes}">
     <div></div>
-    <p><a href="http://mathlesstraveled.com/2012/10/05/factorization-diagrams/">About this diagram</a></p>
+    <p></p>
 </div>
 """
 

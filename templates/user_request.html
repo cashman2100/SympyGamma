@@ -7,6 +7,9 @@ Loading
 
 {% block content %}
 
+<div class="result">
+    <div id="extra-info"></div>
+</div>
 <div id = "cardsEl"></div>
 
 <div id = "errorEl"></div>
@@ -35,7 +38,7 @@ Loading
         MathJax.Hub.Queue(["Typeset", MathJax.Hub, card[0]]);
     }
 
-    function setLatex(latex) {
+    function setLatex(latex, arr) {
         if (currentRequest != null) {
             try {
                 console.log("Canceled pending request");
@@ -45,6 +48,34 @@ Loading
 
         if ($('.result').length) {
             showInputCard(latex); 
+        }
+
+        $('#extra-info').empty();
+        if (arr) {
+            var card = $(
+                '<div class="result_card no_actions">' +
+                    '<div class="card_title unselectable">' + 
+                        '<a>Solving first input</a>' +
+                    '</div>' +
+                    '<div class="cell_input"></div>' +
+                    '<div class="cell_output">' +
+                    '</div>' +
+                    "<center>Support for solving systems of equations coming soon!</center>" +
+                '</div>'
+            );
+
+            var composite = "\\bbox[2pt,border:2px solid black]{"+arr[0]+"}\\\\";
+            for (var i = 1; i < arr.length; i++) {
+                composite += arr[i];
+                if (i != arr.length - 1)
+                    composite += "\\\\";
+            };
+
+            card.find('.cell_output').text('$$' + composite + '$$');
+
+            $('#extra-info').append(card);
+
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, card[0]]);
         }
 
         currentRequest = $.ajax('/input/', {
@@ -71,6 +102,14 @@ Loading
                 });
             }
         });
+    }
+
+    function setLatexList(arr) {
+        if (arr.length > 1) {
+            setLatex(arr[0], arr);
+        } else {
+            setLatex(arr[0]);
+        }
     }
 
     var uuid = "{{ uuid }}";
