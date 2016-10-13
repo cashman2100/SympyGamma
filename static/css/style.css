@@ -949,8 +949,8 @@ td .false {
 }
 
 .feedback-btn.good {
-    border: rgb(0, 209, 61) 2.5px solid;
+    border: #428bd5 2.5px solid;
 }
 .feedback-btn.bad {
-    border: rgb(230, 1, 1) 2.5px solid;
+    border: #428bd5 2.5px solid;
 }
